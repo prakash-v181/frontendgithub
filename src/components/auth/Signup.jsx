@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../authContext";
 import api from "../../api";
 import "./auth.css";
 
@@ -11,7 +10,6 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { setCurrentUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -21,35 +19,24 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      console.log("📤 Sending signup request:", { email, username, password });
+      console.log("📤 Sending signup request:", {
+        email,
+        username,
+        password,
+      });
 
-      const res = await api.post("/auth/register", {
-  email,
-  username,
-  password,
-});
+      await api.post("/auth/register", {
+        email,
+        username,
+        password,
+      });
 
+      // ✅ SUCCESS (no token expected here)
+      setSuccess("✅ Account created successfully! Redirecting to login...");
 
-      console.log("✅ Signup response:", res.data);
-
-      if (res.data?.token) {
-        setSuccess("✅ Account created! Redirecting...");
-
-        localStorage.setItem("token", res.data.token);
-        console.log("💾 Token saved");
-
-        console.log("📡 Fetching user info...");
-        const meRes = await api.get("/auth/me");
-        console.log("✅ User info:", meRes.data);
-
-        setCurrentUser(meRes.data);
-
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        setError("Invalid response from server");
-      }
+      setTimeout(() => {
+        navigate("/auth");
+      }, 1500);
     } catch (err) {
       console.error("❌ Signup error:", err);
 
@@ -58,7 +45,7 @@ const Signup = () => {
       } else if (err.response?.status === 500) {
         setError("Server error. Please try again later.");
       } else {
-        setError(err.message || "Signup failed");
+        setError("Signup failed. Check your connection.");
       }
     } finally {
       setLoading(false);
@@ -74,49 +61,42 @@ const Signup = () => {
         </div>
 
         {error && <div className="error-message">⚠️ {error}</div>}
-
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSignup}>
           <div className="form-group">
-            <label htmlFor="email">Email address</label>
+            <label>Email address</label>
             <input
-              id="email"
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
-              autoComplete="email"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label>Username</label>
             <input
-              id="username"
               type="text"
               placeholder="octocat"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               disabled={loading}
-              autoComplete="username"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label>Password</label>
             <input
-              id="password"
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
-              autoComplete="new-password"
             />
           </div>
 
@@ -136,7 +116,6 @@ const Signup = () => {
 };
 
 export default Signup;
-
 
 
 
