@@ -166,7 +166,7 @@ export default Profile;
 //       if (userId) {
 //         try {
 //           const response = await axios.get(
-//             `http://localhost:3002/userProfile/${userId}`
+            // `https://backendgithub-uz08.onrender.com//userProfile/${userId}`
 //           );
 //           setUserDetails(response.data);
 //         } catch (err) {

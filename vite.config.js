@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3002",
+        target: "https://backendgithub-uz08.onrender.com",
         changeOrigin: true,
       },
     },

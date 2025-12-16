@@ -44,7 +44,7 @@ const FileList = ({ repoId }) => {
           </div>
 
           <a
-            href={`http://localhost:3002/${file.path}`}
+            href={`https://backendgithub-uz08.onrender.com/${file.path}`}
             target="_blank"
             rel="noopener noreferrer"
             style={styles.download}

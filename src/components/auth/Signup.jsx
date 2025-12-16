@@ -240,7 +240,7 @@ export default Signup;
 
 //     try {
 //       setLoading(true);
-//       const res = await axios.post("http://localhost:3002/signup", {
+      // const res = await axios.post("https://backendgithub-uz08.onrender.com", {
 //         email: email,
 //         password: password,
 //         username: username,
