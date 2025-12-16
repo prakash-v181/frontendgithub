@@ -25,28 +25,19 @@ const Signup = () => {
         password,
       });
 
-      await api.post("/auth/register", {
+      const res = await api.post("/auth/register", {
         email,
         username,
         password,
       });
 
-      // ✅ SUCCESS (no token expected here)
-      setSuccess("✅ Account created successfully! Redirecting to login...");
+      console.log("✅ Signup response:", res.data);
 
-      setTimeout(() => {
-        navigate("/auth");
-      }, 1500);
+      setSuccess("✅ Account created successfully!");
+      setTimeout(() => navigate("/auth"), 1200);
     } catch (err) {
       console.error("❌ Signup error:", err);
-
-      if (err.response?.status === 400) {
-        setError(err.response.data?.message || "Signup failed");
-      } else if (err.response?.status === 500) {
-        setError("Server error. Please try again later.");
-      } else {
-        setError("Signup failed. Check your connection.");
-      }
+      setError(err.response?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -55,67 +46,172 @@ const Signup = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
-          <h2>Create your account</h2>
-          <p>Join our GitHub-like platform</p>
-        </div>
+        <h2>Create your account</h2>
 
-        {error && <div className="error-message">⚠️ {error}</div>}
+        {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSignup}>
-          <div className="form-group">
-            <label>Email address</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-          <div className="form-group">
-            <label>Username</label>
-            <input
-              type="text"
-              placeholder="octocat"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              disabled={loading}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-          <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? "Creating account..." : "Sign up"}
+          <button disabled={loading}>
+            {loading ? "Creating..." : "Sign up"}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>
-            Already have an account? <Link to="/auth">Sign in</Link>
-          </p>
-        </div>
+        <p>
+          Already have an account? <Link to="/auth">Login</Link>
+        </p>
       </div>
     </div>
   );
 };
 
 export default Signup;
+
+
+
+
+// import React, { useState } from "react";
+// import { useNavigate, Link } from "react-router-dom";
+// import api from "../../api";
+// import "./auth.css";
+
+// const Signup = () => {
+//   const [email, setEmail] = useState("");
+//   const [username, setUsername] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+//   const [success, setSuccess] = useState("");
+//   const navigate = useNavigate();
+
+//   const handleSignup = async (e) => {
+//     e.preventDefault();
+//     setError("");
+//     setSuccess("");
+//     setLoading(true);
+
+//     try {
+//       console.log("📤 Sending signup request:", {
+//         email,
+//         username,
+//         password,
+//       });
+
+//       await api.post("/auth/register", {
+//         email,
+//         username,
+//         password,
+//       });
+
+//       // ✅ SUCCESS (no token expected here)
+//       setSuccess("✅ Account created successfully! Redirecting to login...");
+
+//       setTimeout(() => {
+//         navigate("/auth");
+//       }, 1500);
+//     } catch (err) {
+//       console.error("❌ Signup error:", err);
+
+//       if (err.response?.status === 400) {
+//         setError(err.response.data?.message || "Signup failed");
+//       } else if (err.response?.status === 500) {
+//         setError("Server error. Please try again later.");
+//       } else {
+//         setError("Signup failed. Check your connection.");
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="auth-container">
+//       <div className="auth-card">
+//         <div className="auth-header">
+//           <h2>Create your account</h2>
+//           <p>Join our GitHub-like platform</p>
+//         </div>
+
+//         {error && <div className="error-message">⚠️ {error}</div>}
+//         {success && <div className="success-message">{success}</div>}
+
+//         <form onSubmit={handleSignup}>
+//           <div className="form-group">
+//             <label>Email address</label>
+//             <input
+//               type="email"
+//               placeholder="you@example.com"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               required
+//               disabled={loading}
+//             />
+//           </div>
+
+//           <div className="form-group">
+//             <label>Username</label>
+//             <input
+//               type="text"
+//               placeholder="octocat"
+//               value={username}
+//               onChange={(e) => setUsername(e.target.value)}
+//               required
+//               disabled={loading}
+//             />
+//           </div>
+
+//           <div className="form-group">
+//             <label>Password</label>
+//             <input
+//               type="password"
+//               placeholder="••••••••"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               required
+//               disabled={loading}
+//             />
+//           </div>
+
+//           <button type="submit" disabled={loading} className="submit-btn">
+//             {loading ? "Creating account..." : "Sign up"}
+//           </button>
+//         </form>
+
+//         <div className="auth-footer">
+//           <p>
+//             Already have an account? <Link to="/auth">Sign in</Link>
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Signup;
 
 
 
